@@ -1,6 +1,6 @@
 # geoai-felicidad
 
-Demo de **GeoAI** de [Spatialis S.A.S.](https://spatialis.co): detección de crecimiento urbano sobre la **Ciudadela La Felicidad** (Fontibón, Bogotá), que pasó de potreros a más de 200 edificaciones en poco más de una década.
+Demo de **GeoAI** de [Spatialis S.A.S.](https://spatialis.co): detección de crecimiento urbano sobre la **Ciudadela La Felicidad** (Fontibón, Bogotá), que pasó de potreros a más de un centenar de edificaciones nuevas en poco más de una década.
 
 En vivo: <https://spatialis-co.github.io/geoai-felicidad/>
 
@@ -9,9 +9,9 @@ En vivo: <https://spatialis-co.github.io/geoai-felicidad/>
 Un flujo de GeoAI aplicado a imagen satelital, con dos dispositivos:
 
 1. **Comparación multitemporal** — un *swipe* entre la imagen de **2014** (potreros) y la **actual** (la ciudadela construida). Arrastra el tirador para revelar el cambio.
-2. **Extracción de edificaciones** — las construcciones aparecen con un revelado animado, clasificadas por tipo (residencial, en construcción, comercial, dotacional, industrial), como la salida de un modelo de detección sobre la imagen. Clic en cualquiera para ver su huella, pisos y categoría.
+2. **Detección de cambio** — las edificaciones construidas *después de 2014* aparecen con un revelado animado, clasificadas por tipo (residencial, en construcción, comercial, dotacional, industrial). Clic en cualquiera para ver su huella, pisos, categoría y qué había en ese suelo en 2014.
 
-El panel resume el resultado: **230 edificaciones**, **46 ha** de huella construida y **10+ años** de cambio.
+El panel resume el resultado: **103 edificaciones nuevas desde 2014**, **17 ha** construidas y **10+ años** de cambio.
 
 ## Honestidad sobre los datos
 
@@ -23,15 +23,17 @@ Esta es una **demo de producto**, y conviene ser claro sobre de dónde sale cada
 | Imagen actual | Esri World Imagery | Esri |
 | Huellas de edificación | OpenStreetMap | ODbL |
 
-Las huellas provienen de OpenStreetMap y en la demo **representan** la salida de un modelo de extracción de edificaciones. En un proyecto real, el modelo de Spatialis las extrae directamente de la imagen satelital, con control de calidad, y el resultado se integra a la plataforma SIG corporativa del cliente. La demo no ejecuta un modelo en el navegador: muestra, con datos reales y verificables, cómo se ve y se usa ese resultado.
+La **detección de cambio sí es real**: cada huella de OpenStreetMap se contrasta, pixel a pixel, contra la imagen satelital de 2014 y se conserva solo si ese suelo estaba **sin construir** (potrero o tierra) en esa fecha. Así, lo que ya existía en 2014 —el C.C. Hayuelos, la zona industrial del sureste— no aparece como crecimiento. El resultado representa el crecimiento del periodo, no un volcado genérico de OSM.
 
-`data/edificaciones.geojson` (79 KB) se reconstruye con `tools/build_edificaciones.py` a partir de la respuesta de OpenStreetMap incluida en `tools/osm-buildings-raw.json`:
+Lo que la demo **no** hace es segmentar las edificaciones directamente del raster: toma las huellas ya vectorizadas de OSM. En un proyecto real, el modelo de Spatialis extrae las huellas de la propia imagen (sin depender de OSM), con control de calidad, y el resultado se integra a la plataforma SIG corporativa del cliente.
+
+`data/edificaciones.geojson` se reconstruye con `tools/detectar_cambios.py` a partir de las huellas de OSM (`tools/osm-buildings-raw.json`) y la imagen Wayback 2014:
 
 ```bash
-python3 tools/build_edificaciones.py data/edificaciones.geojson
+python3 tools/detectar_cambios.py data/edificaciones.geojson
 ```
 
-El script clasifica cada edificación, calcula su huella (área geodésica sobre la esfera autálica de WGS84) y las ordena por tamaño para que el revelado empiece por las torres grandes.
+El script descarga el mosaico satelital de 2014, clasifica el suelo bajo cada huella (vegetación / tierra / ya construido), marca como nuevas las que estaban sobre suelo libre, calcula su huella (área geodésica sobre la esfera autálica de WGS84) y las ordena por tamaño para que el revelado empiece por las edificaciones grandes. Requiere `Pillow`.
 
 ## Cómo está hecho
 

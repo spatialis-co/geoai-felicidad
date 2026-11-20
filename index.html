@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>GeoAI · Crecimiento urbano de La Felicidad | Spatialis</title>
   <meta name="description"
-    content="Detección de crecimiento urbano con GeoAI sobre la Ciudadela La Felicidad (Bogotá): de potreros a 230 edificaciones en una década, con comparación de imagen satelital antes/después. Demo de Spatialis S.A.S.">
+    content="Detección de crecimiento urbano con GeoAI sobre la Ciudadela La Felicidad (Bogotá): comparación de imagen satelital 2014 vs hoy y detección de edificaciones nuevas sobre lo que eran potreros. Demo de Spatialis S.A.S.">
   <meta name="color-scheme" content="dark">
   <meta property="og:title" content="GeoAI · Crecimiento urbano de La Felicidad · Spatialis">
   <meta property="og:description"
-    content="De potreros a ciudadela en una década: detección de edificaciones sobre imagen satelital con GeoAI.">
+    content="De potreros a ciudadela: detección de cambio sobre imagen satelital 2014 vs hoy con GeoAI.">
   <meta property="og:type" content="website">
 
   <link rel="preconnect" href="https://unpkg.com" crossorigin>
@@ -29,8 +29,8 @@
     integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
   <link rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="assets/spatialis-ui.css?v=1">
-  <link rel="stylesheet" href="assets/visor-geoai.css?v=1">
+  <link rel="stylesheet" href="assets/spatialis-ui.css?v=2">
+  <link rel="stylesheet" href="assets/visor-geoai.css?v=2">
   <link rel="icon" href="assets/spatialis-favicon.png" type="image/png">
 </head>
 
@@ -75,13 +75,13 @@
           <div class="sp-section">
             <div class="geoai-hero">
               <div class="geoai-hero__kpi">
-                <div class="geoai-hero__num" data-contador="edificaciones" data-fin="230">0</div>
-                <div class="geoai-hero__lbl">edificaciones detectadas</div>
+                <div class="geoai-hero__num" data-contador="edificaciones" data-fin="103">0</div>
+                <div class="geoai-hero__lbl">edificaciones nuevas desde 2014</div>
               </div>
               <div class="geoai-hero__fila">
                 <div class="geoai-mini">
-                  <div class="geoai-mini__num" data-contador="hectareas" data-fin="46">0</div>
-                  <div class="geoai-mini__lbl">ha de huella</div>
+                  <div class="geoai-mini__num" data-contador="hectareas" data-fin="17">0</div>
+                  <div class="geoai-mini__lbl">ha construidas</div>
                 </div>
                 <div class="geoai-mini">
                   <div class="geoai-mini__num" data-contador="anios" data-fin="10" data-suf="+">0</div>
@@ -120,16 +120,20 @@
             <summary>Cómo funciona · fuentes</summary>
             <div class="sp-fold__body">
               <p class="sp-note">
-                Esta demo ilustra un flujo de <strong>GeoAI</strong>: comparación de imagen satelital multitemporal
-                y extracción automática de edificaciones. La imagen de 2014 proviene de
+                Flujo de <strong>GeoAI</strong> sobre imagen satelital multitemporal. La imagen de 2014 proviene de
                 <a href="https://livingatlas.arcgis.com/wayback/" target="_blank" rel="noopener">Esri World Imagery
-                  Wayback</a> y la actual de Esri World Imagery. Las huellas de edificación provienen de
-                <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>
-                (ODbL) y aquí representan la salida del modelo de detección.
+                  Wayback</a> (release 2014‑02‑20) y la actual de Esri World Imagery. Las huellas de edificación
+                vienen de <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>
+                (ODbL).
               </p>
               <p class="sp-note" style="margin-top:9px">
-                En un proyecto real, Spatialis entrena y ejecuta el modelo que extrae las huellas directamente de la
-                imagen, con control de calidad, y lo integra a su plataforma SIG corporativa.
+                La <strong>detección de cambio</strong> es real: cada huella se contrasta contra la imagen de 2014 y se
+                marca como nueva solo si ese suelo estaba sin construir (potrero o tierra). Por eso lo que ya existía en
+                2014 —Hayuelos, la zona industrial— no aparece como crecimiento.
+              </p>
+              <p class="sp-note" style="margin-top:9px">
+                En un proyecto real, Spatialis entrena un modelo que extrae las huellas directamente de la imagen (sin
+                depender de OSM), con control de calidad, y lo integra a la plataforma SIG corporativa del cliente.
               </p>
             </div>
           </details>
@@ -190,8 +194,8 @@
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
-  <script src="assets/spatialis-ui.js?v=1" defer></script>
-  <script src="assets/visor-geoai.js?v=1" defer></script>
+  <script src="assets/spatialis-ui.js?v=2" defer></script>
+  <script src="assets/visor-geoai.js?v=2" defer></script>
 </body>
 
 </html>

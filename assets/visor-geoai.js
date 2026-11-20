@@ -33,6 +33,13 @@
     otro: { color: "#cbd5e1", etiqueta: "Otras" },
   };
 
+  /* qué había bajo la huella en la imagen de 2014 */
+  var SUELO_2014 = {
+    vegetacion: "Potrero / vegetación",
+    suelo: "Suelo descubierto",
+    construido: "Ya edificado",
+  };
+
   var map, capaHuellas, handleX = 0.5, datos = null;
   var paneDespues, divHandle;
 
@@ -58,9 +65,17 @@
 
   function colocarSwipe(fraccion) {
     handleX = Math.max(0.05, Math.min(0.95, fraccion));
-    var px = Math.round(map.getSize().x * handleX);
-    /* la capa "hoy" se recorta para mostrarse solo a la derecha del tirador */
-    paneDespues.style.clipPath = "inset(0 0 0 " + px + "px)";
+    var size = map.getSize();
+    var px = Math.round(size.x * handleX);
+    /* La capa "hoy" se recorta para verse solo a la DERECHA del tirador.
+       Se usa la propiedad `clip` (no `clip-path`) y en coordenadas de capa:
+       los paneles de Leaflet no tienen tamaño propio —los tiles se desbordan—
+       y viven dentro del map-pane trasladado, así que clip-path sobre ellos no
+       recorta de forma fiable. Es la técnica del plugin oficial side-by-side. */
+    var nw = map.containerPointToLayerPoint([0, 0]);
+    var se = map.containerPointToLayerPoint([size.x, size.y]);
+    var corte = map.containerPointToLayerPoint([px, 0]).x;
+    paneDespues.style.clip = "rect(" + [nw.y, se.x, se.y, corte].join("px,") + "px)";
     divHandle.style.left = px + "px";
     var antes = document.querySelector(".epoca--antes");
     var hoy = document.querySelector(".epoca--hoy");
@@ -120,10 +135,11 @@
           L.DomEvent.stopPropagation(e);
           var p = f.properties;
           var cls = CLASES[p.cat] || CLASES.otro;
-          SP.ficha.mostrar(p.nombre || "Edificación detectada", cls.etiqueta, [
+          SP.ficha.mostrar(p.nombre || "Edificación nueva", cls.etiqueta, [
             ["Huella", SP.entero(p.area_m2) + " m²"],
             ["Pisos", p.niveles ? String(p.niveles) : "—"],
             ["Categoría", cls.etiqueta],
+            ["En 2014 aquí había", SUELO_2014[p.suelo_2014] || "—"],
           ]);
         });
       },
@@ -167,7 +183,7 @@
       document.querySelector(".epoca--hoy").style.display = "";
     } else {
       /* solo detección: se muestra la imagen de hoy completa */
-      paneDespues.style.clipPath = "none";
+      paneDespues.style.clip = "auto";
       divHandle.style.display = "none";
       document.querySelector(".epoca--antes").style.display = "none";
       document.querySelector(".epoca--hoy").style.display = "none";
