@@ -1,6 +1,6 @@
 # geoai-felicidad
 
-Demo de **GeoAI** de [Spatialis S.A.S.](https://spatialis.co): detección de crecimiento urbano sobre la **Ciudadela La Felicidad** (Fontibón, Bogotá), que pasó de potreros a más de un centenar de edificaciones nuevas en poco más de una década.
+Demo de **GeoAI** de [Spatialis S.A.S.](https://spatialis.com.co): detección de crecimiento urbano sobre la **Ciudadela La Felicidad** (Fontibón, Bogotá), que pasó de potreros a más de un centenar de edificaciones nuevas en poco más de una década.
 
 En vivo: <https://spatialis-co.github.io/geoai-felicidad/>
 
@@ -49,7 +49,7 @@ Dentro de un `iframe`, la rueda del ratón desplaza la página y solo hace zoom 
 
 ## Identidad
 
-Interfaz alineada al sistema oficial de spatialis.co: reparto de color 60‑30‑10 (azul corporativo, acento esmeralda `#34D399`), tipografías Nunito y JetBrains Mono, e isotipo oficial. `assets/spatialis-ui.css` es la misma hoja que usan los demás demos de Spatialis.
+Interfaz alineada al sistema oficial de spatialis.com.co: reparto de color 60‑30‑10 (azul corporativo, acento esmeralda `#34D399`), tipografías Nunito y JetBrains Mono, e isotipo oficial. `assets/spatialis-ui.css` es la misma hoja que usan los demás demos de Spatialis.
 
 ## Licencia
 
@@ -57,4 +57,4 @@ Código de demostración, todos los derechos reservados (archivo `LICENSE`). Ima
 
 ## Contacto
 
-Spatialis S.A.S. · <https://spatialis.co> · desarrollo@spatialis.com.co
+Spatialis S.A.S. · <https://spatialis.com.co> · desarrollo@spatialis.com.co
