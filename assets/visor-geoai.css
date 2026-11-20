@@ -1,0 +1,265 @@
+/* ==========================================================================
+   GeoAI · La Felicidad — piezas propias del visor.
+   Lo transversal (barra, panel, cargador, ficha) vive en spatialis-ui.css.
+   ========================================================================== */
+
+#map { position: absolute; inset: 0; background: #0a1016; }
+
+/* el fondo del mapa mientras cargan teselas, sin blanco */
+.leaflet-container { background: #0a1016; }
+
+/* -------------------------------------------------------------- swipe */
+
+.swipe-handle {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  z-index: 410;
+  pointer-events: none;
+  transform: translateX(-1px);
+}
+
+.swipe-handle__linea {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(0, 199, 253, 0), #00c7fd 18%, #00c7fd 82%, rgba(0, 199, 253, 0));
+  box-shadow: 0 0 10px rgba(0, 199, 253, .7);
+}
+
+.swipe-handle__grip {
+  position: absolute;
+  top: 50%;
+  left: 1px;
+  transform: translate(-50%, -50%);
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  color: #04121c;
+  background: #00c7fd;
+  box-shadow: 0 2px 14px rgba(0, 0, 0, .55), 0 0 0 4px rgba(0, 199, 253, .22);
+  cursor: ew-resize;
+  pointer-events: auto;
+  transition: transform 140ms var(--sp-ease);
+}
+
+.swipe-handle.arrastrando .swipe-handle__grip { transform: translate(-50%, -50%) scale(1.08); }
+
+/* etiquetas de época sobre el mapa */
+.epoca {
+  position: absolute;
+  top: calc(var(--sp-topbar-h) + 14px);
+  z-index: 405;
+  padding: 7px 13px;
+  border-radius: 10px;
+  background: rgba(7, 13, 24, .72);
+  border: 1px solid var(--sp-border);
+  backdrop-filter: blur(6px);
+  pointer-events: none;
+  transition: opacity 200ms var(--sp-ease);
+  line-height: 1.05;
+}
+
+.epoca span {
+  display: block;
+  font-family: var(--sp-mono);
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: .02em;
+}
+
+.epoca small { font-size: 10.5px; color: var(--sp-muted); text-transform: uppercase; letter-spacing: .08em; }
+.epoca--antes { left: 14px; }
+.epoca--antes span { color: #cbd5e1; }
+.epoca--hoy { right: 14px; text-align: right; }
+.epoca--hoy span { color: var(--sp-cian); }
+
+/* la hoja de imagen "hoy" recorta con una transición suave al cambiar de modo */
+.leaflet-pane.leaflet-despues-pane { /* marcador, el clip lo pone el JS */ }
+
+/* --------------------------------------------------- línea de escaneo IA */
+
+.scanline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: var(--sp-topbar-h);
+  height: 120px;
+  z-index: 408;
+  pointer-events: none;
+  opacity: 0;
+  background: linear-gradient(to bottom, rgba(52, 211, 153, 0), rgba(52, 211, 153, .18) 70%, rgba(52, 211, 153, .55));
+  border-bottom: 2px solid rgba(52, 211, 153, .9);
+  box-shadow: 0 0 24px rgba(52, 211, 153, .35);
+}
+
+.scanline.activa { animation: sp-escaneo 1.5s var(--sp-ease) forwards; }
+
+@keyframes sp-escaneo {
+  0% { opacity: 1; transform: translateY(0); }
+  90% { opacity: 1; }
+  100% { opacity: 0; transform: translateY(calc(100vh - var(--sp-topbar-h))); }
+}
+
+/* --------------------------------------------- huellas detectadas (SVG) */
+
+.huella {
+  opacity: 0;
+  transition: opacity .45s var(--sp-ease);
+  cursor: pointer;
+}
+
+.huella.vista { opacity: 1; }
+.huella:hover { fill-opacity: .5 !important; }
+
+/* destello neón al "detectarse" cada edificación */
+.huella--pop { animation: sp-pop .6s ease-out; }
+
+@keyframes sp-pop {
+  0% { filter: drop-shadow(0 0 7px currentColor) brightness(2); }
+  100% { filter: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scanline.activa { animation: none; opacity: 0; }
+  .huella { transition: none; }
+  .huella--pop { animation: none; }
+}
+
+/* ------------------------------------------------- panel: héroe GeoAI */
+
+.geoai-hero {
+  padding: 14px;
+  border-radius: var(--sp-radius);
+  background:
+    radial-gradient(120% 90% at 100% 0%, rgba(52, 211, 153, .14), transparent 60%),
+    linear-gradient(170deg, var(--sp-elev), var(--sp-surface));
+  border: 1px solid var(--sp-border);
+}
+
+.geoai-hero__num {
+  font-family: var(--sp-mono);
+  font-size: 2.3rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -.02em;
+  color: var(--sp-accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.geoai-hero__lbl { margin-top: 3px; font-size: 11.5px; color: var(--sp-muted); }
+
+.geoai-hero__fila { display: flex; gap: 10px; margin-top: 13px; }
+.geoai-mini { flex: 1; }
+
+.geoai-mini__num {
+  font-family: var(--sp-mono);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--sp-cian);
+  font-variant-numeric: tabular-nums;
+}
+
+.geoai-mini__lbl { font-size: 10.5px; color: var(--sp-faint); }
+
+.geoai-reescanear {
+  margin-top: 11px;
+  width: 100%;
+  height: 38px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  border: 1px solid var(--sp-border);
+  border-radius: var(--sp-radius-sm);
+  background: var(--sp-elev);
+  color: var(--sp-text);
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 150ms var(--sp-ease), border-color 150ms var(--sp-ease);
+}
+
+.geoai-reescanear:hover { background: var(--sp-surface); border-color: var(--sp-cian); color: var(--sp-cian); }
+.geoai-reescanear:focus-visible { outline: none; box-shadow: var(--sp-ring); }
+
+/* --------------------------------------------------- switch e interruptor */
+
+.geoai-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  font-size: 12.5px;
+  color: var(--sp-muted);
+  cursor: pointer;
+}
+
+.geoai-switch input { position: absolute; opacity: 0; pointer-events: none; }
+
+.geoai-switch__track {
+  position: relative;
+  flex: none;
+  width: 34px;
+  height: 19px;
+  border-radius: 999px;
+  background: #1c2a44;
+  border: 1px solid var(--sp-border);
+  transition: background 160ms var(--sp-ease), border-color 160ms var(--sp-ease);
+}
+
+.geoai-switch__track::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--sp-faint);
+  transition: transform 180ms var(--sp-ease), background 160ms var(--sp-ease);
+}
+
+.geoai-switch input:checked ~ .geoai-switch__track {
+  background: rgba(0, 199, 253, .22);
+  border-color: var(--sp-cian);
+}
+
+.geoai-switch input:checked ~ .geoai-switch__track::after {
+  transform: translateX(15px);
+  background: var(--sp-cian);
+}
+
+/* ------------------------------------------------------------- leyenda */
+
+.geoai-leyenda { display: flex; flex-direction: column; gap: 7px; }
+
+.geoai-leyenda__item { display: flex; align-items: center; gap: 9px; font-size: 12px; color: var(--sp-muted); }
+
+.geoai-leyenda__sw {
+  flex: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 3px;
+  border: 1px solid rgba(248, 250, 252, .25);
+}
+
+.geoai-leyenda__tx { flex: 1; min-width: 0; }
+.geoai-leyenda__n { flex: none; color: var(--sp-faint); font-size: 11px; }
+
+/* ----------------------------------------------- controles de Leaflet */
+
+.leaflet-bar,
+.leaflet-control-zoom { border: 0 !important; }
+
+@media (max-width: 860px) {
+  .epoca { top: calc(var(--sp-topbar-h) + 10px); padding: 5px 10px; }
+  .epoca span { font-size: 15px; }
+  .geoai-hero__num { font-size: 2rem; }
+}

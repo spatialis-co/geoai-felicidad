@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>GeoAI · Crecimiento urbano de La Felicidad | Spatialis</title>
+  <meta name="description"
+    content="Detección de crecimiento urbano con GeoAI sobre la Ciudadela La Felicidad (Bogotá): de potreros a 230 edificaciones en una década, con comparación de imagen satelital antes/después. Demo de Spatialis S.A.S.">
+  <meta name="color-scheme" content="dark">
+  <meta property="og:title" content="GeoAI · Crecimiento urbano de La Felicidad · Spatialis">
+  <meta property="og:description"
+    content="De potreros a ciudadela en una década: detección de edificaciones sobre imagen satelital con GeoAI.">
+  <meta property="og:type" content="website">
+
+  <link rel="preconnect" href="https://unpkg.com" crossorigin>
+  <link rel="preconnect" href="https://wayback.maptiles.arcgis.com" crossorigin>
+  <link rel="preconnect" href="https://services.arcgisonline.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link rel="preload" href="data/edificaciones.geojson" as="fetch" crossorigin>
+
+  <style>
+    html,body{margin:0;height:100%;background:#070d18;color:#f8fafc}
+  </style>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="assets/spatialis-ui.css?v=1">
+  <link rel="stylesheet" href="assets/visor-geoai.css?v=1">
+  <link rel="icon" href="assets/spatialis-favicon.png" type="image/png">
+</head>
+
+<body>
+  <div class="sp-app">
+
+    <header class="sp-topbar">
+      <a class="sp-brand" href="https://spatialis.co" target="_blank" rel="noopener">
+        <img class="sp-brand__mark" src="assets/spatialis-isotipo.png" alt="" width="30" height="30">
+        <span class="sp-brand__name">spatialis</span>
+      </a>
+
+      <span class="sp-topbar__divider" aria-hidden="true"></span>
+
+      <div class="sp-topbar__title">
+        <h1>GeoAI · Detección de crecimiento urbano</h1>
+        <p>Ciudadela La Felicidad · Fontibón, Bogotá</p>
+      </div>
+
+      <div class="sp-topbar__actions">
+        <span class="sp-badge sp-badge--meta"><span class="sp-badge__dot"></span>GeoAI</span>
+        <a class="sp-link" href="https://spatialis.co/#contacto" target="_blank" rel="noopener">Solicitar demo</a>
+      </div>
+    </header>
+
+    <div class="sp-stage">
+      <div id="map" role="application" aria-label="Comparación satelital de La Felicidad"></div>
+
+      <!-- etiquetas de época sobre el swipe -->
+      <div class="epoca epoca--antes" aria-hidden="true"><span>2014</span><small>potreros</small></div>
+      <div class="epoca epoca--hoy" aria-hidden="true"><span>HOY</span><small>ciudadela</small></div>
+
+      <!-- línea de escaneo IA -->
+      <div class="scanline" aria-hidden="true"></div>
+
+      <aside class="sp-panel" data-open="false" aria-label="Panel de detección">
+        <span class="sp-panel__handle" aria-hidden="true"></span>
+        <button class="sp-panel__close" type="button" aria-label="Cerrar panel">&times;</button>
+
+        <div class="sp-panel__scroll">
+
+          <div class="sp-section">
+            <div class="geoai-hero">
+              <div class="geoai-hero__kpi">
+                <div class="geoai-hero__num" data-contador="edificaciones" data-fin="230">0</div>
+                <div class="geoai-hero__lbl">edificaciones detectadas</div>
+              </div>
+              <div class="geoai-hero__fila">
+                <div class="geoai-mini">
+                  <div class="geoai-mini__num" data-contador="hectareas" data-fin="46">0</div>
+                  <div class="geoai-mini__lbl">ha de huella</div>
+                </div>
+                <div class="geoai-mini">
+                  <div class="geoai-mini__num" data-contador="anios" data-fin="10" data-suf="+">0</div>
+                  <div class="geoai-mini__lbl">años de cambio</div>
+                </div>
+              </div>
+            </div>
+            <button class="geoai-reescanear" type="button" id="reescanear">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2.2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 12a9 9 0 1 0 9-9 9 9 0 0 0-6.4 2.6L3 8" /><path d="M3 3v5h5" />
+              </svg>
+              Volver a escanear
+            </button>
+          </div>
+
+          <div class="sp-section">
+            <h2 class="sp-section__title">Vista</h2>
+            <div class="sp-chips" data-modo>
+              <button class="sp-chip" type="button" data-modo-btn="comparar" aria-pressed="true">Comparar</button>
+              <button class="sp-chip" type="button" data-modo-btn="deteccion" aria-pressed="false">Solo detección</button>
+            </div>
+            <label class="geoai-switch">
+              <input type="checkbox" id="mostrar-huellas" checked>
+              <span class="geoai-switch__track" aria-hidden="true"></span>
+              <span>Mostrar edificaciones detectadas</span>
+            </label>
+          </div>
+
+          <div class="sp-section">
+            <h2 class="sp-section__title">Clasificación</h2>
+            <div class="geoai-leyenda" id="leyenda"></div>
+          </div>
+
+          <details class="sp-section sp-fold">
+            <summary>Cómo funciona · fuentes</summary>
+            <div class="sp-fold__body">
+              <p class="sp-note">
+                Esta demo ilustra un flujo de <strong>GeoAI</strong>: comparación de imagen satelital multitemporal
+                y extracción automática de edificaciones. La imagen de 2014 proviene de
+                <a href="https://livingatlas.arcgis.com/wayback/" target="_blank" rel="noopener">Esri World Imagery
+                  Wayback</a> y la actual de Esri World Imagery. Las huellas de edificación provienen de
+                <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>
+                (ODbL) y aquí representan la salida del modelo de detección.
+              </p>
+              <p class="sp-note" style="margin-top:9px">
+                En un proyecto real, Spatialis entrena y ejecuta el modelo que extrae las huellas directamente de la
+                imagen, con control de calidad, y lo integra a su plataforma SIG corporativa.
+              </p>
+            </div>
+          </details>
+
+        </div>
+      </aside>
+
+      <button class="sp-fab" type="button" aria-expanded="false" aria-label="Abrir panel de detección">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2" />
+          <rect x="7" y="7" width="10" height="10" rx="1" />
+        </svg>
+        Detección
+      </button>
+
+      <div class="sp-info" data-open="false" role="status" aria-live="polite">
+        <div class="sp-info__head">
+          <div>
+            <p class="sp-info__kind"></p>
+            <h3 class="sp-info__title"></h3>
+          </div>
+          <button class="sp-info__close" type="button" aria-label="Cerrar ficha">&times;</button>
+        </div>
+        <div class="sp-info__body">
+          <dl class="sp-attrs"></dl>
+        </div>
+      </div>
+
+      <div class="sp-toast" data-open="false" role="alert">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#fbbf24" stroke-width="2"
+          stroke-linecap="round" style="flex:none;margin-top:1px" aria-hidden="true">
+          <path d="M12 9v4M12 17h.01" />
+          <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+        </svg>
+        <span class="sp-toast__msg"></span>
+      </div>
+
+      <div class="sp-statusbar">
+        <span class="sp-coords">—</span>
+        <span class="sp-statusbar__spacer"></span>
+        <span class="sp-attribution">
+          Imagen: Esri, Maxar · Edificaciones: © OpenStreetMap · <a href="https://spatialis.co" target="_blank"
+            rel="noopener">spatialis.co</a>
+        </span>
+      </div>
+
+      <div class="sp-loader">
+        <div class="sp-loader__inner">
+          <img class="sp-loader__marca" src="assets/spatialis-isotipo.png" alt="" width="52" height="52">
+          <div class="sp-loader__text">Preparando el modelo de detección…</div>
+          <div class="sp-loader__bar"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+  <script src="assets/spatialis-ui.js?v=1" defer></script>
+  <script src="assets/visor-geoai.js?v=1" defer></script>
+</body>
+
+</html>
