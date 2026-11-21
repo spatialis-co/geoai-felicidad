@@ -3,7 +3,7 @@
    Spatialis S.A.S.
 
    Dos dispositivos narrativos sobre la misma zona:
-     1) swipe de imagen satelital 2014 ↔ hoy (de potreros a ciudadela),
+     1) swipe de imagen satelital 2014 ↔ hoy (de lotes a ciudadela),
      2) revelado animado de las edificaciones "detectadas" sobre la imagen.
 
    Las huellas provienen de OpenStreetMap (ODbL) y aquí representan la salida
@@ -35,7 +35,7 @@
 
   /* qué había bajo la huella en la imagen de 2014 */
   var SUELO_2014 = {
-    vegetacion: "Potrero / vegetación",
+    vegetacion: "Lote / vegetación",
     suelo: "Suelo descubierto",
     construido: "Ya edificado",
   };
@@ -253,7 +253,10 @@
     map.getPane("huellas").style.zIndex = 400;
     paneDespues = map.getPane("despues");
 
-    L.tileLayer(TESELAS_2014, { pane: "antes", maxNativeZoom: 18, maxZoom: 19 }).addTo(map);
+    /* La imagen Wayback de 2014 solo tiene teselas hasta z17 en esta zona; con
+       maxNativeZoom:17 Leaflet amplía la mejor que hay al acercar (algo borrosa,
+       pero es la resolución real de 2014) en vez de pedir z18+ y quedar en negro. */
+    L.tileLayer(TESELAS_2014, { pane: "antes", maxNativeZoom: 17, maxZoom: 19 }).addTo(map);
     L.tileLayer(TESELAS_HOY, { pane: "despues", maxNativeZoom: 19, maxZoom: 19 }).addTo(map);
 
     L.control.zoom({ position: "topright" }).addTo(map);

@@ -175,7 +175,7 @@ def clase_suelo(rgb):
     # gris neutro (techo metálico, concreto, pavimento): poca diferencia R-B
     if calido <= 10 and abs(r - g) <= 12:
         return "construido"
-    # marrón cálido y no muy claro => tierra/potrero seco
+    # marrón cálido y no muy claro => tierra/lote seco
     if r >= g >= b and calido >= 12 and brillo <= 155:
         return "suelo"
     if brillo > 150:
@@ -184,7 +184,7 @@ def clase_suelo(rgb):
 
 
 def clasificar(mosaico, anillo):
-    pts = puntos_interiores(anillo, 5)
+    pts = puntos_interiores(anillo, 6)
     conteo = {"vegetacion": 0, "suelo": 0, "construido": 0}
     for lon, lat in pts:
         px = mosaico.muestra(lon, lat)
@@ -238,10 +238,12 @@ def main(destino):
 
         frac_natural, _, dominante = clasificar(m2014, anillo)
         _, frac_build_hoy, _ = clasificar(mhoy, anillo)
-        # cambio real: el suelo bajo la huella estaba libre (vegetación/tierra)
-        # en 2014. Un leve respaldo con la imagen de hoy descarta polígonos que
-        # hoy no muestran nada edificado (p. ej. una cancha mal etiquetada).
-        nuevo = frac_natural >= 0.5 and frac_build_hoy >= 0.2
+        # Cambio real: el suelo bajo la huella estaba libre (vegetación/tierra)
+        # en 2014. No se exige que hoy aparezca ya edificado, para no descartar
+        # las que siguen en obra (hoy son suelo pelado); solo se descartan los
+        # polígonos que hoy son claramente vegetación (p. ej. una cancha o
+        # parque mal etiquetado como building en OSM).
+        nuevo = frac_natural >= 0.5 and frac_build_hoy >= 0.1
         por_suelo[dominante] = por_suelo.get(dominante, 0) + 1
 
         feats.append({

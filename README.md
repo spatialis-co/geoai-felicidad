@@ -1,6 +1,6 @@
 # geoai-felicidad
 
-Demo de **GeoAI** de [Spatialis S.A.S.](https://spatialis.com.co): detección de crecimiento urbano sobre la **Ciudadela La Felicidad** (Fontibón, Bogotá), que pasó de potreros a más de un centenar de edificaciones nuevas en poco más de una década.
+Demo de **GeoAI** de [Spatialis S.A.S.](https://spatialis.com.co): detección de crecimiento urbano sobre la **Ciudadela La Felicidad** (Fontibón, Bogotá), que pasó de lotes a más de un centenar de edificaciones nuevas en poco más de una década.
 
 En vivo: <https://spatialis-co.github.io/geoai-felicidad/>
 
@@ -8,10 +8,10 @@ En vivo: <https://spatialis-co.github.io/geoai-felicidad/>
 
 Un flujo de GeoAI aplicado a imagen satelital, con dos dispositivos:
 
-1. **Comparación multitemporal** — un *swipe* entre la imagen de **2014** (potreros) y la **actual** (la ciudadela construida). Arrastra el tirador para revelar el cambio.
+1. **Comparación multitemporal** — un *swipe* entre la imagen de **2014** (lotes) y la **actual** (la ciudadela construida). Arrastra el tirador para revelar el cambio.
 2. **Detección de cambio** — las edificaciones construidas *después de 2014* aparecen con un revelado animado, clasificadas por tipo (residencial, en construcción, comercial, dotacional, industrial). Clic en cualquiera para ver su huella, pisos, categoría y qué había en ese suelo en 2014.
 
-El panel resume el resultado: **103 edificaciones nuevas desde 2014**, **17 ha** construidas y **10+ años** de cambio.
+El panel resume el resultado: **114 edificaciones nuevas desde 2014**, **17 ha** construidas y **10+ años** de cambio.
 
 ## Honestidad sobre los datos
 
@@ -23,7 +23,7 @@ Esta es una **demo de producto**, y conviene ser claro sobre de dónde sale cada
 | Imagen actual | Esri World Imagery | Esri |
 | Huellas de edificación | OpenStreetMap | ODbL |
 
-La **detección de cambio sí es real**: cada huella de OpenStreetMap se contrasta, pixel a pixel, contra la imagen satelital de 2014 y se conserva solo si ese suelo estaba **sin construir** (potrero o tierra) en esa fecha. Así, lo que ya existía en 2014 —el C.C. Hayuelos, la zona industrial del sureste— no aparece como crecimiento. El resultado representa el crecimiento del periodo, no un volcado genérico de OSM.
+La **detección de cambio sí es real**: cada huella de OpenStreetMap se contrasta, pixel a pixel, contra la imagen satelital de 2014 y se conserva solo si ese suelo estaba **sin construir** (lote o tierra) en esa fecha. Así, lo que ya existía en 2014 —el C.C. Hayuelos, la zona industrial del sureste— no aparece como crecimiento. El resultado representa el crecimiento del periodo, no un volcado genérico de OSM.
 
 Lo que la demo **no** hace es segmentar las edificaciones directamente del raster: toma las huellas ya vectorizadas de OSM. En un proyecto real, el modelo de Spatialis extrae las huellas de la propia imagen (sin depender de OSM), con control de calidad, y el resultado se integra a la plataforma SIG corporativa del cliente.
 

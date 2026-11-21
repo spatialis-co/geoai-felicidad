@@ -6,11 +6,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>GeoAI · Crecimiento urbano de La Felicidad | Spatialis</title>
   <meta name="description"
-    content="Detección de crecimiento urbano con GeoAI sobre la Ciudadela La Felicidad (Bogotá): comparación de imagen satelital 2014 vs hoy y detección de edificaciones nuevas sobre lo que eran potreros. Demo de Spatialis S.A.S.">
+    content="Detección de crecimiento urbano con GeoAI sobre la Ciudadela La Felicidad (Bogotá): comparación de imagen satelital 2014 vs hoy y detección de edificaciones nuevas sobre lo que eran lotes. Demo de Spatialis S.A.S.">
   <meta name="color-scheme" content="dark">
   <meta property="og:title" content="GeoAI · Crecimiento urbano de La Felicidad · Spatialis">
   <meta property="og:description"
-    content="De potreros a ciudadela: detección de cambio sobre imagen satelital 2014 vs hoy con GeoAI.">
+    content="De lotes a ciudadela: detección de cambio sobre imagen satelital 2014 vs hoy con GeoAI.">
   <meta property="og:type" content="website">
 
   <link rel="preconnect" href="https://unpkg.com" crossorigin>
@@ -60,7 +60,7 @@
       <div id="map" role="application" aria-label="Comparación satelital de La Felicidad"></div>
 
       <!-- etiquetas de época sobre el swipe -->
-      <div class="epoca epoca--antes" aria-hidden="true"><span>2014</span><small>potreros</small></div>
+      <div class="epoca epoca--antes" aria-hidden="true"><span>2014</span><small>lotes</small></div>
       <div class="epoca epoca--hoy" aria-hidden="true"><span>HOY</span><small>ciudadela</small></div>
 
       <!-- línea de escaneo IA -->
@@ -75,7 +75,7 @@
           <div class="sp-section">
             <div class="geoai-hero">
               <div class="geoai-hero__kpi">
-                <div class="geoai-hero__num" data-contador="edificaciones" data-fin="103">0</div>
+                <div class="geoai-hero__num" data-contador="edificaciones" data-fin="114">0</div>
                 <div class="geoai-hero__lbl">edificaciones nuevas desde 2014</div>
               </div>
               <div class="geoai-hero__fila">
@@ -128,7 +128,7 @@
               </p>
               <p class="sp-note" style="margin-top:9px">
                 La <strong>detección de cambio</strong> es real: cada huella se contrasta contra la imagen de 2014 y se
-                marca como nueva solo si ese suelo estaba sin construir (potrero o tierra). Por eso lo que ya existía en
+                marca como nueva solo si ese suelo estaba sin construir (lote o tierra). Por eso lo que ya existía en
                 2014 —Hayuelos, la zona industrial— no aparece como crecimiento.
               </p>
               <p class="sp-note" style="margin-top:9px">
@@ -195,7 +195,7 @@
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
   <script src="assets/spatialis-ui.js?v=2" defer></script>
-  <script src="assets/visor-geoai.js?v=2" defer></script>
+  <script src="assets/visor-geoai.js?v=3" defer></script>
 </body>
 
 </html>
