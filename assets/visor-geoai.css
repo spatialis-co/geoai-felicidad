@@ -307,3 +307,6 @@
 
   .sp-panel__close:hover { color: var(--sp-text); background: rgba(7, 13, 24, .8); }
 }
+
+/* ---- tema claro: el switch del panel usa un gris claro ---- */
+:root[data-theme="light"] .geoai-switch__track { background: #cbd5e1; }
