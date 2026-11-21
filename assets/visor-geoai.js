@@ -220,6 +220,15 @@
   /* ------------------------------------------------------------ arranque */
 
   window.addEventListener("DOMContentLoaded", function () {
+    /* En escritorio el panel arranca desplegado (es el sidebar del visor) pero
+       ahora es colapsable; en móvil se mantiene cerrado tras el FAB. */
+    if (window.matchMedia("(min-width: 861px)").matches) {
+      var pnl = document.querySelector(".sp-panel");
+      var fab = document.querySelector(".sp-fab");
+      if (pnl) pnl.setAttribute("data-open", "true");
+      if (fab) fab.setAttribute("aria-expanded", "true");
+    }
+
     SP.cargarJSON(DATOS).then(function (fc) {
       datos = fc;
       iniciarMapa();

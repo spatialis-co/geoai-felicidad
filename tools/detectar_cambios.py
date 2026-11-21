@@ -238,12 +238,12 @@ def main(destino):
 
         frac_natural, _, dominante = clasificar(m2014, anillo)
         _, frac_build_hoy, _ = clasificar(mhoy, anillo)
-        # Cambio real: el suelo bajo la huella estaba libre (vegetación/tierra)
-        # en 2014. No se exige que hoy aparezca ya edificado, para no descartar
-        # las que siguen en obra (hoy son suelo pelado); solo se descartan los
-        # polígonos que hoy son claramente vegetación (p. ej. una cancha o
-        # parque mal etiquetado como building en OSM).
-        nuevo = frac_natural >= 0.5 and frac_build_hoy >= 0.1
+        # Cambio real y verificable: el suelo bajo la huella estaba libre
+        # (vegetación/tierra) en 2014 Y hoy se ve efectivamente edificado. Esta
+        # segunda condición evita falsos positivos: huellas de OSM de edificios
+        # planeados o sin terminar que hoy siguen siendo pasto —se verían como
+        # un contorno sobre terreno vacío— quedan fuera.
+        nuevo = frac_natural >= 0.5 and frac_build_hoy >= 0.4
         por_suelo[dominante] = por_suelo.get(dominante, 0) + 1
 
         feats.append({

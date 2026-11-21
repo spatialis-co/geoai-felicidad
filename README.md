@@ -11,7 +11,7 @@ Un flujo de GeoAI aplicado a imagen satelital, con dos dispositivos:
 1. **Comparación multitemporal** — un *swipe* entre la imagen de **2014** (lotes) y la **actual** (la ciudadela construida). Arrastra el tirador para revelar el cambio.
 2. **Detección de cambio** — las edificaciones construidas *después de 2014* aparecen con un revelado animado, clasificadas por tipo (residencial, en construcción, comercial, dotacional, industrial). Clic en cualquiera para ver su huella, pisos, categoría y qué había en ese suelo en 2014.
 
-El panel resume el resultado: **114 edificaciones nuevas desde 2014**, **17 ha** construidas y **10+ años** de cambio.
+El panel resume el resultado: **83 edificaciones nuevas desde 2014**, **15 ha** construidas y **10+ años** de cambio.
 
 ## Honestidad sobre los datos
 
